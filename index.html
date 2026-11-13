@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Aritmatika Sosial - Kelas VII</title>
+<style>
+:root{
+  --ink:#172554;--muted:#64748b;--blue:#2563eb;--purple:#7c3aed;
+  --paper:#ffffff;--line:#dbeafe;--green:#15803d;--red:#b91c1c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:22px 14px 42px;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
+  background:linear-gradient(135deg,#e0f2fe 0%,#f5f3ff 48%,#dcfce7 100%);
+}
+.wrap{max-width:900px;margin:auto}
+.hero{
+  position:relative;overflow:hidden;border-radius:24px;padding:30px;color:white;
+  background:linear-gradient(115deg,#1d4ed8,#6d28d9 72%,#9333ea);
+  box-shadow:0 16px 38px #312e8140;
+}
+.hero:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:#ffffff12;right:-55px;top:-90px}
+.hero-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:18px}
+h1{font-size:clamp(25px,5vw,38px);line-height:1.12;margin:0 0 10px}
+.hero p{margin:0;color:#e0e7ff;line-height:1.5;max-width:560px}
+.hero-art{width:190px;min-width:130px;filter:drop-shadow(0 8px 9px #11182733)}
+.card{background:var(--paper);border:1px solid #e0e7ff;border-radius:20px;padding:23px;margin-top:18px;box-shadow:0 10px 28px #1e3a8a0d}
+h2{font-size:21px;margin:0 0 7px}
+.sub{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 18px}
+.identity{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-weight:700;font-size:14px;display:block;margin-bottom:7px}
+input{width:100%;padding:13px 14px;border:1.5px solid #cbd5e1;border-radius:11px;font-size:16px;outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2563eb18}
+.btn{border:0;border-radius:12px;padding:13px 19px;background:var(--blue);color:white;font-size:16px;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}
+.btn:disabled{background:#94a3b8;cursor:not-allowed}
+.start-row{margin-top:17px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--muted)}
+#quiz{display:none}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.chip{display:inline-block;background:#eff6ff;color:#1d4ed8;padding:8px 12px;border-radius:30px;font-size:13px;font-weight:700}
+.progress{height:9px;background:#e2e8f0;border-radius:30px;overflow:hidden;margin:15px 0 20px}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#2563eb,#8b5cf6);transition:width .25s}
+.qbox{border:1px solid #dbeafe;border-radius:17px;padding:20px;background:linear-gradient(180deg,#fff,#fbfdff)}
+.qhead{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+.qillustration{width:74px;height:74px;flex:0 0 74px;border-radius:17px;background:#eff6ff;display:grid;place-items:center}
+.qillustration svg{width:61px;height:61px}
+.qnum{font-size:13px;font-weight:800;color:#2563eb;letter-spacing:.06em}
+#question{font-size:19px;line-height:1.55;margin:5px 0 0;font-weight:700}
+#options{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:17px}
+.option{display:flex;align-items:center;gap:10px;text-align:left;padding:13px;border:1.5px solid #cbd5e1;border-radius:12px;background:white;color:var(--ink);font-size:15px;cursor:pointer;min-height:52px}
+.option:hover:not(:disabled){border-color:#3b82f6;background:#eff6ff}
+.letter{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:50%;background:#e0e7ff;color:#3730a3;font-weight:800}
+.option.correct{border-color:#16a34a;background:#f0fdf4}
+.option.wrong{border-color:#dc2626;background:#fef2f2}
+.option:disabled{cursor:default;opacity:1}
+#feedback{display:none;margin-top:16px;border-radius:12px;padding:13px 15px;line-height:1.55;font-size:14px}
+#feedback.good{display:block;background:#f0fdf4;color:#166534}
+#feedback.bad{display:block;background:#fef2f2;color:#991b1b}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:17px}
+#result{display:none;text-align:center}
+.score-circle{height:150px;width:150px;margin:20px auto;border-radius:50%;display:grid;place-items:center;background:#eff6ff;border:9px solid #bfdbfe;color:#1d4ed8;font-size:32px;font-weight:900}
+.result-details{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:15px;line-height:1.8;text-align:left;margin:16px 0}
+.review{margin-top:20px;text-align:left}
+.review-item{padding:12px 0;border-bottom:1px solid #e2e8f0;line-height:1.5;font-size:14px}
+.review-item:last-child{border:0}
+.goodtxt{color:#15803d;font-weight:700}.badtxt{color:#b91c1c;font-weight:700}
+.footer{text-align:center;color:#64748b;font-size:12px;margin:18px 0 0}
+@media(max-width:600px){
+ .hero{padding:23px}.hero-art{width:112px;min-width:95px}
+ .card{padding:17px}.identity{grid-template-columns:1fr}
+ #options{grid-template-columns:1fr}.qbox{padding:15px}
+ .qillustration{width:60px;height:60px;flex-basis:60px}.qillustration svg{width:50px;height:50px}
+ #question{font-size:17px}
+}
+@media print{body{background:white}.hero,.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <div class="hero-inner">
+  <div>
+   <h1>Quiz Aritmatika Sosial</h1>
+   <p>Belajar matematika lewat kegiatan jual beli dan kehidupan sehari-hari. Ayo tunjukkan kemampuanmu!</p>
+  </div>
+  <svg class="hero-art" viewBox="0 0 220 180" role="img" aria-label="Ilustrasi tas belanja, uang, dan koin">
+   <ellipse cx="112" cy="159" rx="91" ry="12" fill="#172554" opacity=".18"/>
+   <path d="M52 67h115l-12 91H64z" fill="#fef08a" stroke="#fff" stroke-width="5"/>
+   <path d="M83 70c0-42 52-42 52 0" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+   <path d="M78 100h64" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"/>
+   <circle cx="151" cy="39" r="26" fill="#fde68a" stroke="#fff" stroke-width="5"/>
+   <text x="151" y="49" text-anchor="middle" font-size="29" font-weight="bold" fill="#92400e">Rp</text>
+   <circle cx="48" cy="137" r="22" fill="#fbbf24" stroke="#fff" stroke-width="5"/>
+   <text x="48" y="145" text-anchor="middle" font-size="23" font-weight="bold" fill="#92400e">¢</text>
+   <path d="M180 111l8 8 16-20" fill="none" stroke="#bbf7d0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+ </div>
+</header>
+
+<section class="card" id="identity">
+ <h2>Identitas Siswa</h2>
+ <p class="sub">Isi identitas terlebih dahulu sebelum memulai quiz.</p>
+ <div class="identity">
+  <div><label for="studentName">Nama lengkap</label><input id="studentName" type="text" placeholder="Masukkan nama lengkap" autocomplete="name"></div>
+  <div><label for="studentClass">Kelas</label><input id="studentClass" type="text" placeholder="Contoh: VII-A"></div>
+ </div>
+ <div class="start-row">
+  <button class="btn" id="startBtn">Mulai Mengerjakan</button>
+  <span class="hint">25 soal pilihan ganda • Nilai maksimal 100</span>
+ </div>
+</section>
+
+<section class="card" id="quiz">
+ <div class="topline">
+  <span class="chip" id="studentTag">Nama siswa</span>
+  <span class="chip" id="counter">Soal 1 dari 25</span>
+ </div>
+ <div class="progress"><div id="bar"></div></div>
+ <div class="qbox">
+  <div class="qhead">
+   <div class="qillustration" id="illustration"></div>
+   <div><div class="qnum" id="qnum">PERTANYAAN 1</div><div id="question"></div></div>
+  </div>
+  <div id="options"></div>
+  <div id="feedback" role="status"></div>
+ </div>
+ <div class="nav">
+  <span class="hint" id="answered">Sudah dijawab: 0</span>
+  <button class="btn" id="nextBtn" disabled>Soal Berikutnya</button>
+ </div>
+</section>
+
+<section class="card" id="result">
+ <h2>Quiz Selesai!</h2>
+ <p class="sub" id="resultIntro"></p>
+ <div class="score-circle" id="score">0</div>
+ <h2 id="message"></h2>
+ <div class="result-details" id="details"></div>
+ <button class="btn" onclick="location.reload()">Ulangi Quiz</button>
+ <div class="review"><h2>Pembahasan Jawaban</h2><div id="reviewList"></div></div>
+</section>
+<p class="footer">Quiz Matematika Kelas VII • Materi Aritmatika Sosial</p>
+</div>
+
+<script>
+const art = {
+ money:`<svg viewBox="0 0 80 80" aria-hidden="true"><rect x="9" y="20" width="61" height="39" rx="7" fill="#86efac" stroke="#15803d" stroke-width="3"/><circle cx="40" cy="39" r="13" fill="#fef08a" stroke="#15803d" stroke-width="2"/><text x="40" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#166534">Rp</text></svg>`,
+ tag:`<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M12 16h34l24 24-29 29L12 40z" fill="#f9a8d4" stroke="#9d174d" stroke-width="3"/><circle cx="28" cy="31" r="5" fill="#fff" stroke="#9d174d" stroke-width="2"/><text x="43" y="48" text-anchor="middle" font-size="18" font-weight="bold" fill="#831843">%</text></svg>`,
+ bag:`<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M15 29h50l-5 42H20z" fill="#fde68a" stroke="#b45309" stroke-width="3"/><path d="M28 30c0-24 24-24 24 0" fill="none" stroke="#b45309" stroke-width="4"/><path d="M29 46h22" stroke="#d97706" stroke-width="4" stroke-linecap="round"/></svg>`,
+ scale:`<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 13v48M19 25h42M25 25L13 48h24zM55 25L43 48h24z" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="3" stroke-linejoin="round"/><path d="M25 64h30" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round"/></svg>`,
+ bank:`<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M8 30L40 12l32 18z" fill="#c4b5fd" stroke="#5b21b6" stroke-width="3"/><path d="M14 34h52M18 35v27M32 35v27M48 35v27M62 35v27M10 65h60" stroke="#5b21b6" stroke-width="4"/><circle cx="40" cy="24" r="4" fill="#fff"/></svg>`,
+ box:`<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M12 26l28-14 28 14-28 15z" fill="#fde68a" stroke="#92400e" stroke-width="3"/><path d="M12 26v32l28 13V41z" fill="#fbbf24" stroke="#92400e" stroke-width="3"/><path d="M68 26v32L40 71V41z" fill="#f59e0b" stroke="#92400e" stroke-width="3"/><path d="M40 13v27" stroke="#92400e" stroke-width="3"/></svg>`
+};
+const questions = [
+{q:"Rina membeli sebuah buku seharga Rp12.000. Harga tersebut disebut ....",o:["Harga jual","Harga beli","Untung","Diskon"],a:1,art:"bag",e:"Harga beli adalah harga yang dibayarkan saat membeli barang, yaitu Rp12.000."},
+{q:"Andi membeli pensil Rp2.000 dan menjualnya Rp2.500. Andi mengalami ....",o:["Rugi Rp500","Untung Rp500","Untung Rp2.000","Rugi Rp2.500"],a:1,art:"money",e:"Untung = harga jual − harga beli = Rp2.500 − Rp2.000 = Rp500."},
+{q:"Sebuah tas dibeli dengan harga Rp80.000 dan dijual Rp70.000. Kerugiannya adalah ....",o:["Rp5.000","Rp10.000","Rp15.000","Rp20.000"],a:1,art:"bag",e:"Rugi = harga beli − harga jual = Rp80.000 − Rp70.000 = Rp10.000."},
+{q:"Pak Budi membeli sepeda Rp400.000 lalu menjualnya Rp460.000. Persentase keuntungannya adalah ....",o:["10%","12%","15%","20%"],a:2,art:"money",e:"Untung = Rp60.000. Persentase untung = 60.000 ÷ 400.000 × 100% = 15%."},
+{q:"Sebuah barang dibeli Rp150.000 dan dijual Rp120.000. Persentase kerugiannya adalah ....",o:["10%","15%","20%","25%"],a:2,art:"money",e:"Rugi = Rp30.000. Persentase rugi = 30.000 ÷ 150.000 × 100% = 20%."},
+{q:"Harga sebuah baju Rp100.000 mendapat diskon 20%. Besar diskonnya adalah ....",o:["Rp10.000","Rp15.000","Rp20.000","Rp25.000"],a:2,art:"tag",e:"Diskon = 20% × Rp100.000 = Rp20.000."},
+{q:"Harga sepatu Rp200.000 mendapat diskon 15%. Harga yang harus dibayar adalah ....",o:["Rp150.000","Rp160.000","Rp170.000","Rp185.000"],a:2,art:"tag",e:"Diskon = 15% × Rp200.000 = Rp30.000. Harga setelah diskon = Rp200.000 − Rp30.000 = Rp170.000."},
+{q:"Sebuah toko memberi diskon 25% untuk jaket seharga Rp240.000. Harga setelah diskon adalah ....",o:["Rp160.000","Rp170.000","Rp180.000","Rp200.000"],a:2,art:"tag",e:"Diskon = 25% × Rp240.000 = Rp60.000. Harga akhir = Rp180.000."},
+{q:"Berat beras beserta karungnya disebut ....",o:["Neto","Bruto","Tara","Diskon"],a:1,art:"box",e:"Bruto adalah berat kotor, yaitu berat barang beserta kemasannya."},
+{q:"Berat isi bersih suatu kemasan tanpa wadah disebut ....",o:["Bruto","Tara","Neto","Untung"],a:2,art:"box",e:"Neto adalah berat bersih isi barang tanpa kemasan."},
+{q:"Berat bruto sebuah karung beras 50 kg dan taranya 2 kg. Netonya adalah ....",o:["48 kg","50 kg","52 kg","100 kg"],a:0,art:"scale",e:"Neto = bruto − tara = 50 kg − 2 kg = 48 kg."},
+{q:"Sebuah kaleng memiliki neto 800 gram dan tara 50 gram. Brutonnya adalah ....",o:["750 gram","800 gram","850 gram","900 gram"],a:2,art:"scale",e:"Bruto = neto + tara = 800 gram + 50 gram = 850 gram."},
+{q:"Bruto sebuah kotak buah 12 kg. Jika netonya 11,5 kg, taranya adalah ....",o:["0,25 kg","0,5 kg","1 kg","1,5 kg"],a:1,art:"scale",e:"Tara = bruto − neto = 12 − 11,5 = 0,5 kg."},
+{q:"Ibu menabung Rp500.000 dengan bunga tunggal 10% per tahun. Bunga selama 1 tahun adalah ....",o:["Rp25.000","Rp40.000","Rp50.000","Rp100.000"],a:2,art:"bank",e:"Bunga = 10% × Rp500.000 = Rp50.000."},
+{q:"Tabungan Rp1.000.000 mendapat bunga tunggal 6% per tahun. Bunga selama 6 bulan adalah ....",o:["Rp30.000","Rp60.000","Rp90.000","Rp120.000"],a:0,art:"bank",e:"Bunga 1 tahun = 6% × Rp1.000.000 = Rp60.000. Selama 6 bulan = ½ × Rp60.000 = Rp30.000."},
+{q:"Doni meminjam Rp800.000 dengan bunga tunggal 5% per tahun. Bunga selama 1 tahun adalah ....",o:["Rp20.000","Rp30.000","Rp40.000","Rp50.000"],a:2,art:"bank",e:"Bunga = 5% × Rp800.000 = Rp40.000."},
+{q:"Modal Rp200.000 menghasilkan untung Rp40.000. Harga jual barang tersebut adalah ....",o:["Rp160.000","Rp200.000","Rp220.000","Rp240.000"],a:3,art:"money",e:"Harga jual = harga beli + untung = Rp200.000 + Rp40.000 = Rp240.000."},
+{q:"Sebuah barang dijual Rp180.000 dengan kerugian Rp20.000. Harga belinya adalah ....",o:["Rp160.000","Rp180.000","Rp200.000","Rp220.000"],a:2,art:"money",e:"Harga beli = harga jual + rugi = Rp180.000 + Rp20.000 = Rp200.000."},
+{q:"Pedagang membeli 10 buku dengan harga Rp5.000 per buku. Total harga belinya adalah ....",o:["Rp15.000","Rp50.000","Rp55.000","Rp500.000"],a:1,art:"bag",e:"Total harga beli = 10 × Rp5.000 = Rp50.000."},
+{q:"Pedagang membeli 5 kg jeruk seharga Rp15.000 per kg. Jika semua jeruk dijual Rp18.000 per kg, keuntungan seluruhnya adalah ....",o:["Rp10.000","Rp15.000","Rp20.000","Rp25.000"],a:1,art:"money",e:"Untung per kg = Rp18.000 − Rp15.000 = Rp3.000. Total untung = 5 × Rp3.000 = Rp15.000."},
+{q:"Harga beli sebuah jam Rp75.000. Jika dijual dengan untung 20%, harga jualnya adalah ....",o:["Rp80.000","Rp85.000","Rp90.000","Rp95.000"],a:2,art:"tag",e:"Untung = 20% × Rp75.000 = Rp15.000. Harga jual = Rp75.000 + Rp15.000 = Rp90.000."},
+{q:"Sebuah barang seharga Rp300.000 mendapat potongan harga Rp45.000. Persentase diskonnya adalah ....",o:["10%","12%","15%","20%"],a:2,art:"tag",e:"Persentase diskon = 45.000 ÷ 300.000 × 100% = 15%."},
+{q:"Sebuah toko membeli 20 botol minuman seharga Rp4.000 per botol. Jika dijual Rp5.000 per botol, total keuntungan adalah ....",o:["Rp10.000","Rp15.000","Rp20.000","Rp25.000"],a:2,art:"bag",e:"Untung per botol = Rp1.000. Total untung = 20 × Rp1.000 = Rp20.000."},
+{q:"Neto sebuah kemasan gula 2 kg. Jika taranya 100 gram, bruto kemasan tersebut adalah ....",o:["1,9 kg","2 kg","2,1 kg","2,2 kg"],a:2,art:"scale",e:"Bruto = neto + tara = 2 kg + 0,1 kg = 2,1 kg."},
+{q:"Seseorang menabung Rp2.000.000 dengan bunga tunggal 12% per tahun. Jumlah tabungan setelah 1 tahun (modal + bunga) adalah ....",o:["Rp2.120.000","Rp2.200.000","Rp2.240.000","Rp2.400.000"],a:2,art:"bank",e:"Bunga = 12% × Rp2.000.000 = Rp240.000. Jumlah tabungan = Rp2.000.000 + Rp240.000 = Rp2.240.000."}
+];
+
+let current=0,score=0,answered=0,locked=false,student="";
+const $=id=>document.getElementById(id);
+$("startBtn").addEventListener("click",()=>{
+ const name=$("studentName").value.trim(), cls=$("studentClass").value.trim();
+ if(!name||!cls){alert("Silakan isi nama lengkap dan kelas terlebih dahulu.");return;}
+ student=name; $("studentTag").textContent=`${name} • ${cls}`;
+ $("identity").style.display="none"; $("quiz").style.display="block"; render();
+});
+function render(){
+ locked=false;const item=questions[current];
+ $("counter").textContent=`Soal ${current+1} dari ${questions.length}`;
+ $("qnum").textContent=`PERTANYAAN ${current+1}`;
+ $("question").textContent=item.q;
+ $("illustration").innerHTML=art[item.art];
+ $("options").innerHTML="";$("feedback").className="";$("feedback").textContent="";
+ $("answered").textContent=`Sudah dijawab: ${answered}`;
+ $("bar").style.width=`${current/questions.length*100}%`;
+ $("nextBtn").disabled=true;
+ $("nextBtn").textContent=current===questions.length-1?"Lihat Hasil":"Soal Berikutnya";
+ item.o.forEach((option,i)=>{
+  const b=document.createElement("button");b.className="option";
+  const letter=document.createElement("span");letter.className="letter";letter.textContent=""+String.fromCharCode(65+i);
+  const label=document.createElement("span");label.textContent=option;
+  b.append(letter,label);b.addEventListener("click",()=>choose(i));$("options").appendChild(b);
+ });
+}
+function choose(i){
+ if(locked)return;locked=true;answered++;
+ const item=questions[current],buttons=[...$("options").children];
+ buttons.forEach((b,j)=>{b.disabled=true;if(j===item.a)b.classList.add("correct");if(j===i&&i!==item.a)b.classList.add("wrong");});
+ const correct=i===item.a;if(correct)score++;
+ $("feedback").className=correct?"good":"bad";
+ $("feedback").textContent=(correct?"Benar! ":"Belum tepat. Jawaban benar: "+String.fromCharCode(65+item.a)+". ")+item.e;
+ $("answered").textContent=`Sudah dijawab: ${answered}`;$("nextBtn").disabled=false;
+}
+$("nextBtn").addEventListener("click",()=>{
+ if(current<questions.length-1){current++;render();}else showResult();
+});
+function showResult(){
+ $("quiz").style.display="none";$("result").style.display="block";$("bar").style.width="100%";
+ const nilai=score*4;
+ $("score").textContent=nilai;
+ $("resultIntro").textContent=`Hasil pengerjaan ${student}`;
+ $("message").textContent=nilai>=88?"Luar biasa!":nilai>=72?"Bagus, terus berlatih!":nilai>=60?"Cukup baik, tingkatkan lagi!":"Tetap semangat belajar!";
+ $("details").innerHTML=`<b>Nama:</b> ${escapeHtml(student)}<br><b>Kelas:</b> ${escapeHtml($("studentClass").value.trim())}<br><b>Jumlah soal:</b> 25<br><b>Jawaban benar:</b> ${score}<br><b>Jawaban salah:</b> ${25-score}<br><b>Nilai akhir:</b> ${nilai}`;
+ $("reviewList").innerHTML="";
+ questions.forEach((q,i)=>{
+  const d=document.createElement("div");d.className="review-item";
+  const ok=selectedAnswers[i]===q.a;
+  d.innerHTML=`<b>${i+1}. ${escapeHtml(q.q)}</b><br><span class="${ok?"goodtxt":"badtxt"}">${ok?"Benar":"Belum tepat"} — Jawaban: ${String.fromCharCode(65+q.a)}. ${escapeHtml(q.o[q.a])}</span><br>${escapeHtml(q.e)}`;
+  $("reviewList").appendChild(d);
+ });
+}
+const selectedAnswers=[];
+const oldChoose=choose;
+choose=function(i){selectedAnswers[current]=i;oldChoose(i);};
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+</script>
+</body>
+</html>
